@@ -1,0 +1,39 @@
+male(aaron).
+male(julian).
+male(joeG).
+male(joeM).
+male(nonno).
+female(lil).
+female(mia).
+female(demi).
+female(marilyn).
+female(nonna).
+brother(aaron,julian).
+sister(marilyn,lil).
+sister(mia,demi).
+parent_of(nonno,lil).
+parent_of(nonno,marilyn).
+parent_of(nonna,lil).
+parent_of(nonna,marilyn).
+parent_of(marilyn,aaron).
+parent_of(marilyn,julian).
+parent_of(joeG,aaron).
+parent_of(joeG,julian).
+parent_of(lil,mia).
+parent_of(lil, demi).
+parent_of(joeM,mia).
+parent_of(joeM,demi).
+father(X,Y) :- male(X),parent_of(X,Y).
+mother(X,Y) :- female(X), parent_of(X,Y).
+son(X,Y) :- male(X), parent_of(Y,X).
+daughter(X,Y) :- female(X), parent_of(Y,X).
+grandfather(X,Y) :- male(X), parent_of(X,Y), parent_of(Y,Z).
+sibling(X,Y) :- sister(X,Y).
+sibling(X,Y) :- sister(Y,X).
+sibling(X,Y) :- brother(X,Y).
+sibling(X,Y) :- brother(Y,X).
+aunt(X,Y) :- female(X), sibling(X,Z), parent_of(Z,Y).
+uncle(X,Y) :- male(X), sibling(X,Z), parent_of(Z,Y).
+cousin(X,Y) :- parent_of(Z,X), parent_of(P,Y), sibling(Z,P).
+spouse(X,Y) :- parent_of(X,Z),  parent_of(Y,Z).
+parent(X,Y) :- parent_of(X,Y).

@@ -4,7 +4,7 @@ male(warren).
 male(peter).
 female(kather).
 female(maryalice).
-female(ann).
+female(ann)
 brother(jerry,stuart).
 brother(jerry,kather).
 brother(peter, warren).
