@@ -1,11 +1,10 @@
 :- dynamic yes/1.
 :- dynamic no/1.
-ask(0):- nl, processOptions(['Did you play with the slides']).
 ask(X):- getNextQuestion(X,L), processOptions(L).
 
 getNextQuestion(Y,L):-
     yes(Y), findall(X,relatedQuestion(X,Y),L);
-    findall(X,randomQuestion(X),L).
+    findall(X,randomQuestion(Y,X),L).
 
 processOptions(L):-
     findall(X,yes(X),YesList),
@@ -14,10 +13,13 @@ processOptions(L):-
     list_to_set(L,ListSet),
     list_to_set(ResponseList,R),
     subtract(ListSet,R,ValidOption),
-    member(Y,ValidOption),
+    member(Y,ValidOption), getResponse(Y).
+
+getResponse(Y):-
     print(Y), nl, read(Response),
     ((Response == y -> assert(yes(Y));
-    Response == n -> assert(no(Y)))),
+    Response == n -> assert(no(Y));
+     Response == q -> abort)),
     ask(Y).
    /*ask(Y).*/
 play(["Did you play with the slides?",
@@ -51,7 +53,7 @@ learn(["Did you learn math today?",
        "Did you use the computers today?"]).
 
 sports(["Did you play any sports today?",
-        "Did you play soccer todat?",
+        "Did you play soccer today?",
         "Did you play cricket today?",
         "Did you run much today?",
         "Did you sprint much today?",
@@ -67,10 +69,13 @@ relatedQuestion(X,Y):- eat(L), member(X,L), member(Y,L).
 relatedQuestion(X,Y):- learn(L), member(X,L), member(Y,L).
 relatedQuestion(X,Y):- sports(L), member(X,L), member(Y,L).
 relatedQuestion(X,Y):- friends(L), member(X,L), member(Y,L).
-randomQuestion(Y):-
+randomQuestion(X,Y):-
     play(A),eat(B),learn(C),sports(D),friends(E),
-    append(A,B,AB),append(AB,C,ABC),append(ABC,D,ABCD),
-    append(ABCD,E,ABCDE),random_member(Y,ABCDE).
+    ((member(X,A)->append(B,C,BC),append(BC,D,BCD),append(BCD,E,BCDE),random_member(Y,BCDE));
+    (member(X,B)->append(A,C,AC),append(AC,D,ACD),append(ACD,E,ACDE),random_member(Y,ACDE));
+    (member(X,C)->append(A,B,AB),append(AB,D,ABD),append(ABD,E,ABDE),random_member(Y,ABDE));
+    (member(X,D)->append(A,B,AB),append(AB,C,ABC),append(ABC,E,ABCE),random_member(Y,ABCE));
+    (member(X,E)->append(A,B,AB),append(AB,C,ABC),append(ABC,D,ABCD),random_member(Y,ABCD))).
 yes(nothing).
 no(nothing).
 
