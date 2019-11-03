@@ -1,27 +1,10 @@
-from pyswip import Prolog
-from tkinter import*
+from pyswip import Prolog, registerForeign, Atom
+import sys
 import tkinter as tk
-win = tk.Tk()
-window = tk.Canvas(win, width=500, height=400)
-window.pack()
+from tkinter import *
 
-
-def solutions():
-    prolog = Prolog()
-    prolog.consult('ParentTalkingToKid.pl')
-    for solution in prolog.query("ask(X)"):
-        print(solution["X"])
-
-
-buttonX = tk.Button(win, text='Start', command=solutions)
-window.create_window(150, 150, window=buttonX)
-
-
-win.mainloop()
-
-
-
-
-
+prolog = Prolog()
+prolog.consult('ParentTalkingToKid.pl')
+result = [answer["X"] for answer in prolog.query("ask(X)")]
 
 

@@ -16,7 +16,7 @@ ask(X):- getNextQuestion(X,L), processOptions(L).
  ******************************/
 getNextQuestion(Y,L):-
     yes(Y), findall(X,relatedQuestion(X,Y),L); /*Get related Question*/
-    findall(X,randomQuestion(Y,X),L). /*Get random question.*/
+    no(Y), findall(X,randomQuestion(Y,X),L). /*Get random question.*/
 
 /*********************************
  * processOptions:
